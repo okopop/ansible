@@ -1,1 +1,5 @@
-x
+---
+vcenter_server: x
+vcenter_cluster: x
+vcenter_resource: x
+vcenter_datastore: x

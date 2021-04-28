@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  any_errors_fatal: true
+  vars_files:
+    - /vars/vault_vars.yml
+  vars:
+   sat_username: "{{ vault_sat_username }}"
+   sat_password: "{{ vault_sat_password }}"
+   sat_server_url: x
+   sat_org: x
+   sat_cv_list:
+     - cv1
+     - cv2
+     - cv3
+   tasks:
+     - name: "Ensure production same as qa version"
+       redhat.satellite.content_view_version:
+         username: "{{ sat_username }}"
+         password: "{{ sat_password }}"
+         server_url: "{{ sat_server_url }}"
+         organization: "{{ sat_org }}"
+         content_view: "{{ item }}"
+         current_lifecycle_environment: qa
+         lifecycle_environments:
+           - production
+       with_items: "{{ sat_cv_list }}"
+
+     - name: "Ensure qa same as dev version"
+       redhat.satellite.content_view_version:
+         username: "{{ sat_username }}"
+         password: "{{ sat_password }}"
+         server_url: "{{ sat_server_url }}"
+         organization: "{{ sat_org }}"
+         content_view: "{{ item }}"
+         current_lifecycle_environment: dev
+         lifecycle_environments:
+           - qa
+       with_items: "{{ sat_cv_list }}"
+
+     - name: "Publish new content-view version and promote library & dev"
+       redhat.satellite.content_view_version:
+         username: "{{ sat_username }}"
+         password: "{{ sat_password }}"
+         server_url: "{{ sat_server_url }}"
+         organization: "{{ sat_org }}"
+         content_view: "{{ item }}"
+         description: "autopublish by ansbile"
+         lifecycle_environments:
+           - library
+           - dev
+       with_items: "{{ sat_cv_list }}"

@@ -44,7 +44,7 @@
          server_url: "{{ sat_server_url }}"
          organization: "{{ sat_org }}"
          content_view: "{{ item }}"
-         description: "autopublish by ansbile"
+         description: "autopublish by ansible"
          lifecycle_environments:
            - library
            - dev
